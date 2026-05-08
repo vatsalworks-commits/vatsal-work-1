@@ -1,0 +1,1738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vatsal Works — AI Automation & SMMA Agency</title>
+<meta name="description" content="AI Automation, Lead Generation & Social Media Growth for Modern Brands.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #020204;
+  --white: #f8f8fc;
+  --gray: #8a8a9a;
+  --gray-dim: #3a3a4a;
+  --blue: #4f8ef7;
+  --blue-glow: rgba(79,142,247,0.18);
+  --purple: #a259ff;
+  --purple-glow: rgba(162,89,255,0.15);
+  --accent: #5cffb1;
+  --glass: rgba(255,255,255,0.04);
+  --glass-border: rgba(255,255,255,0.08);
+  --radius: 18px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── CUSTOM CURSOR ── */
+#cursor-dot {
+  position: fixed;
+  top: 0; left: 0;
+  width: 10px; height: 10px;
+  background: var(--blue);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.08s ease, background 0.3s;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+}
+#cursor-ring {
+  position: fixed;
+  top: 0; left: 0;
+  width: 38px; height: 38px;
+  border: 1.5px solid rgba(79,142,247,0.55);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: transform 0.18s cubic-bezier(.23,1,.32,1), width 0.25s, height 0.25s, border-color 0.3s, opacity 0.2s;
+}
+body:hover #cursor-ring { opacity: 1; }
+.cursor-hover #cursor-ring { width: 56px; height: 56px; border-color: var(--purple); }
+.cursor-hover #cursor-dot { background: var(--purple); transform: translate(-50%,-50%) scale(1.6); }
+
+/* ── LOADING SCREEN ── */
+#loader {
+  position: fixed; inset: 0;
+  background: var(--black);
+  z-index: 10000;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+  gap: 28px;
+  transition: opacity 0.7s ease, visibility 0.7s;
+}
+#loader.hidden { opacity: 0; visibility: hidden; }
+.loader-logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  background: linear-gradient(90deg, var(--blue), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.loader-bar-wrap {
+  width: 200px; height: 2px;
+  background: var(--gray-dim);
+  border-radius: 99px; overflow: hidden;
+}
+.loader-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--blue), var(--purple));
+  border-radius: 99px;
+  width: 0%;
+  animation: loadBar 1.8s cubic-bezier(.4,0,.2,1) forwards;
+}
+@keyframes loadBar { to { width: 100%; } }
+
+/* ── NOISE TEXTURE ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 1; opacity: 0.5;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 22px 6%;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(2,2,4,0.6);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--glass-border);
+  transition: background 0.4s;
+}
+.nav-logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1.18rem;
+  letter-spacing: -0.02em;
+  background: linear-gradient(90deg, var(--blue), var(--purple));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a {
+  color: var(--gray);
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-cta {
+  background: linear-gradient(135deg, var(--blue), var(--purple));
+  color: #fff !important;
+  padding: 9px 22px;
+  border-radius: 99px;
+  font-size: 0.84rem !important;
+  font-weight: 600 !important;
+  text-decoration: none;
+  transition: opacity 0.2s, box-shadow 0.2s !important;
+  box-shadow: 0 0 20px rgba(79,142,247,0.3);
+}
+.nav-cta:hover { opacity: 0.88; box-shadow: 0 0 32px rgba(162,89,255,0.4); }
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+.hamburger span { width: 24px; height: 1.5px; background: var(--white); border-radius: 2px; transition: all 0.3s; }
+
+/* ── HERO ── */
+#hero {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center;
+  position: relative; overflow: hidden;
+  padding: 140px 6% 80px;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 20%, rgba(79,142,247,0.12) 0%, transparent 70%),
+              radial-gradient(ellipse 60% 50% at 80% 70%, rgba(162,89,255,0.1) 0%, transparent 60%),
+              radial-gradient(ellipse 50% 40% at 20% 80%, rgba(92,255,177,0.06) 0%, transparent 55%);
+}
+.grid-bg {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
+}
+.particles-canvas {
+  position: absolute; inset: 0;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  padding: 7px 16px;
+  border-radius: 99px;
+  font-size: 0.78rem;
+  color: var(--gray);
+  margin-bottom: 28px;
+  backdrop-filter: blur(12px);
+  animation: fadeUp 0.8s ease both;
+}
+.badge-dot {
+  width: 7px; height: 7px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+.hero-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2.6rem, 7vw, 5.8rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  margin-bottom: 24px;
+  animation: fadeUp 0.9s 0.1s ease both;
+  position: relative; z-index: 2;
+}
+.hero-title .gradient-text {
+  background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 50%, var(--accent) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero-sub {
+  color: var(--gray);
+  font-size: clamp(1rem, 2vw, 1.22rem);
+  font-weight: 400;
+  max-width: 560px;
+  margin: 0 auto 44px;
+  line-height: 1.65;
+  animation: fadeUp 1s 0.2s ease both;
+  position: relative; z-index: 2;
+}
+.hero-btns {
+  display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+  animation: fadeUp 1s 0.3s ease both;
+  position: relative; z-index: 2;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--blue), var(--purple));
+  color: #fff;
+  padding: 14px 34px;
+  border-radius: 99px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: none; cursor: pointer;
+  box-shadow: 0 0 30px rgba(79,142,247,0.35);
+  transition: box-shadow 0.3s, transform 0.2s;
+}
+.btn-primary:hover { box-shadow: 0 0 50px rgba(162,89,255,0.5); transform: translateY(-2px); }
+.btn-secondary {
+  background: transparent;
+  color: var(--white);
+  padding: 13px 34px;
+  border-radius: 99px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(8px);
+  transition: border-color 0.3s, background 0.3s, transform 0.2s;
+}
+.btn-secondary:hover { border-color: var(--blue); background: var(--blue-glow); transform: translateY(-2px); }
+
+.hero-scroll-hint {
+  position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  color: var(--gray); font-size: 0.75rem; opacity: 0.6;
+  animation: fadeUp 1.2s 0.8s ease both;
+}
+.scroll-line {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--gray), transparent);
+  animation: scrollLine 2s infinite;
+}
+@keyframes scrollLine { 0%{transform:scaleY(0);transform-origin:top} 50%{transform:scaleY(1);transform-origin:top} 100%{transform:scaleY(0);transform-origin:bottom} }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── SECTION BASE ── */
+section { position: relative; z-index: 2; }
+.section-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  color: var(--blue);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.section-label::before { content: ''; width: 20px; height: 1.5px; background: var(--blue); border-radius: 2px; }
+.section-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.9rem, 4vw, 3.2rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 18px;
+}
+.section-sub {
+  color: var(--gray);
+  font-size: 1.05rem;
+  max-width: 500px;
+  line-height: 1.7;
+}
+.container { max-width: 1200px; margin: 0 auto; padding: 0 6%; }
+
+/* ── SERVICES ── */
+#services { padding: 110px 0; }
+.services-header { text-align: center; margin-bottom: 64px; }
+.services-header .section-label { justify-content: center; }
+.services-header .section-sub { margin: 0 auto; }
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.service-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 36px 30px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  backdrop-filter: blur(12px);
+}
+.service-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 0%, var(--blue-glow) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.service-card:hover { border-color: rgba(79,142,247,0.35); transform: translateY(-6px); box-shadow: 0 20px 60px rgba(79,142,247,0.12); }
+.service-card:hover::before { opacity: 1; }
+.service-card.purple-hover:hover { border-color: rgba(162,89,255,0.35); box-shadow: 0 20px 60px rgba(162,89,255,0.12); }
+.service-card.purple-hover::before { background: radial-gradient(circle at 50% 0%, var(--purple-glow) 0%, transparent 70%); }
+.service-icon {
+  width: 50px; height: 50px;
+  background: linear-gradient(135deg, rgba(79,142,247,0.15), rgba(162,89,255,0.1));
+  border: 1px solid rgba(79,142,247,0.2);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 22px;
+  font-size: 1.3rem;
+  transition: transform 0.3s;
+}
+.service-card:hover .service-icon { transform: scale(1.1) rotate(-5deg); }
+.service-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.12rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+}
+.service-desc { color: var(--gray); font-size: 0.9rem; line-height: 1.65; }
+
+/* service tab expand */
+.service-card .expand-content {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(.4,0,.2,1), opacity 0.4s;
+  opacity: 0;
+}
+.service-card.active .expand-content {
+  max-height: 400px; opacity: 1;
+}
+.expand-content ul {
+  margin-top: 18px; padding-left: 0; list-style: none;
+  border-top: 1px solid var(--glass-border);
+  padding-top: 18px;
+}
+.expand-content ul li {
+  color: var(--gray); font-size: 0.85rem;
+  padding: 6px 0;
+  display: flex; align-items: flex-start; gap: 10px;
+  line-height: 1.5;
+}
+.expand-content ul li::before { content: '→'; color: var(--blue); flex-shrink: 0; }
+.service-expand-btn {
+  margin-top: 16px;
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--blue); font-size: 0.83rem; font-weight: 600;
+  cursor: pointer; border: none; background: none;
+  padding: 0; transition: gap 0.2s;
+}
+.service-expand-btn:hover { gap: 10px; }
+.service-expand-btn .arrow { transition: transform 0.3s; }
+.service-card.active .service-expand-btn .arrow { transform: rotate(90deg); }
+
+/* ── SHOWCASE ── */
+#showcase {
+  padding: 100px 0;
+  overflow: hidden;
+}
+.showcase-header { text-align: center; margin-bottom: 60px; }
+.showcase-track-wrap {
+  overflow: hidden;
+  position: relative;
+  padding: 20px 0;
+}
+.showcase-track-wrap::before,
+.showcase-track-wrap::after {
+  content: ''; position: absolute; top: 0; width: 200px; height: 100%; z-index: 10;
+  pointer-events: none;
+}
+.showcase-track-wrap::before { left: 0; background: linear-gradient(90deg, var(--black), transparent); }
+.showcase-track-wrap::after { right: 0; background: linear-gradient(-90deg, var(--black), transparent); }
+.showcase-track {
+  display: flex; gap: 20px;
+  width: max-content;
+  animation: scrollTrack 30s linear infinite;
+}
+.showcase-track:hover { animation-play-state: paused; }
+@keyframes scrollTrack { to { transform: translateX(-50%); } }
+.showcase-panel {
+  width: 340px; height: 240px;
+  flex-shrink: 0;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 28px;
+  position: relative; overflow: hidden;
+  transition: transform 0.4s, border-color 0.3s, box-shadow 0.4s;
+  backdrop-filter: blur(8px);
+}
+.showcase-panel:hover { transform: translateY(-8px) scale(1.02); border-color: rgba(79,142,247,0.3); box-shadow: 0 24px 60px rgba(79,142,247,0.15); }
+.panel-glow {
+  position: absolute; top: -40px; right: -40px;
+  width: 160px; height: 160px;
+  border-radius: 50%;
+  opacity: 0.15;
+}
+.panel-title { font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:0.95rem; margin-bottom:8px; position:relative;z-index:1; }
+.panel-sub { color:var(--gray); font-size:0.8rem; margin-bottom:18px; position:relative;z-index:1; }
+.panel-bars { display:flex; gap:5px; align-items:flex-end; height:60px; position:relative;z-index:1; }
+.panel-bar { border-radius:4px 4px 0 0; flex:1; transition:height 0.5s; }
+.panel-metric {
+  display:flex; justify-content:space-between; align-items:center;
+  position:relative; z-index:1;
+}
+.metric-num { font-family:'Space Grotesk',sans-serif; font-size:1.8rem; font-weight:700; }
+.metric-tag { font-size:0.75rem; color:var(--accent); background:rgba(92,255,177,0.1); padding:4px 10px; border-radius:99px; }
+.panel-nodes { display:flex; gap:10px; flex-wrap:wrap; position:relative;z-index:1; }
+.node {
+  padding:5px 12px; border-radius:99px; font-size:0.75rem; font-weight:500;
+  border:1px solid; transition:all 0.3s;
+}
+.panel-chat { display:flex; flex-direction:column; gap:8px; position:relative;z-index:1; }
+.chat-bubble { padding:8px 14px; border-radius:12px; font-size:0.78rem; max-width:80%; }
+.chat-bubble.user { background:rgba(79,142,247,0.2); margin-left:auto; }
+.chat-bubble.bot { background:var(--glass); border:1px solid var(--glass-border); }
+
+/* ── ABOUT ── */
+#about { padding: 110px 0; }
+.about-grid { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+.about-visual {
+  position:relative;
+  height:420px;
+}
+.about-card {
+  position:absolute;
+  background:var(--glass);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius);
+  padding:24px;
+  backdrop-filter:blur(12px);
+}
+.about-card.main { inset:0; padding:32px; display:flex; flex-direction:column; justify-content:flex-end; background:linear-gradient(145deg, rgba(79,142,247,0.08), rgba(162,89,255,0.06)); }
+.about-card.float1 { top:-20px; right:-20px; width:180px; padding:18px; }
+.about-card.float2 { bottom:0; left:-20px; width:200px; padding:18px; }
+.stat-big { font-family:'Space Grotesk',sans-serif; font-size:2.8rem; font-weight:700; letter-spacing:-0.04em; background:linear-gradient(135deg,var(--blue),var(--purple)); -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+.stat-label { color:var(--gray); font-size:0.8rem; }
+.counters-row { display:flex; gap:28px; margin-top:22px; }
+.counter-item { text-align:center; }
+.counter-num { font-family:'Space Grotesk',sans-serif; font-size:1.6rem; font-weight:700; }
+.counter-lbl { color:var(--gray); font-size:0.75rem; }
+.about-text .section-sub { margin-bottom:32px; }
+.timeline { display:flex; flex-direction:column; gap:0; }
+.tl-item { display:flex; gap:16px; position:relative; }
+.tl-left { display:flex; flex-direction:column; align-items:center; }
+.tl-dot { width:10px;height:10px;border-radius:50%;background:var(--blue);box-shadow:0 0 10px var(--blue);flex-shrink:0;margin-top:5px; }
+.tl-line { width:1px;flex:1;background:linear-gradient(to bottom,var(--blue),transparent);min-height:40px; }
+.tl-content { padding-bottom:32px; }
+.tl-year { color:var(--blue); font-size:0.78rem; font-weight:600; margin-bottom:4px; }
+.tl-title { font-weight:600; font-size:0.95rem; margin-bottom:4px; }
+.tl-desc { color:var(--gray); font-size:0.85rem; line-height:1.6; }
+
+/* ── PROCESS ── */
+#process { padding: 100px 0; }
+.process-header { text-align:center; margin-bottom:70px; }
+.process-steps { display:flex; gap:0; position:relative; }
+.process-steps::before {
+  content:''; position:absolute; top:32px; left:calc(12.5%);
+  width:calc(75%); height:1px;
+  background: linear-gradient(90deg, var(--blue), var(--purple), var(--accent));
+  z-index:0;
+}
+.process-step { flex:1; display:flex; flex-direction:column; align-items:center; text-align:center; position:relative; z-index:1; }
+.step-icon-wrap {
+  width:64px; height:64px;
+  background:var(--black);
+  border:1.5px solid;
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.4rem;
+  margin-bottom:22px;
+  position:relative;
+  transition:transform 0.3s;
+}
+.process-step:hover .step-icon-wrap { transform:scale(1.1); }
+.step-icon-wrap .step-glow {
+  position:absolute; inset:-1px;
+  border-radius:50%;
+  opacity:0;
+  transition:opacity 0.3s;
+}
+.process-step:hover .step-glow { opacity:0.35; }
+.step-num { position:absolute; top:-8px; right:-8px; width:22px;height:22px; background:var(--blue); border-radius:50%; font-size:0.65rem; font-weight:700; display:flex; align-items:center; justify-content:center; }
+.step-title { font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:1rem; margin-bottom:8px; }
+.step-desc { color:var(--gray); font-size:0.83rem; line-height:1.6; max-width:180px; }
+
+/* ── TESTIMONIALS ── */
+#testimonials { padding:100px 0; overflow:hidden; }
+.testimonials-header { text-align:center; margin-bottom:60px; }
+.testi-scroll { overflow:hidden; position:relative; }
+.testi-scroll::before,.testi-scroll::after { content:''; position:absolute;top:0;width:200px;height:100%;z-index:10;pointer-events:none; }
+.testi-scroll::before { left:0; background:linear-gradient(90deg,var(--black),transparent); }
+.testi-scroll::after { right:0; background:linear-gradient(-90deg,var(--black),transparent); }
+.testi-track {
+  display:flex; gap:20px; width:max-content;
+  animation: scrollTrack 40s linear infinite;
+}
+.testi-track:hover { animation-play-state:paused; }
+.testi-card {
+  width:340px; flex-shrink:0;
+  background:var(--glass);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius);
+  padding:30px;
+  backdrop-filter:blur(12px);
+  transition:border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+.testi-card:hover { border-color:rgba(79,142,247,0.3); box-shadow:0 16px 50px rgba(79,142,247,0.1); transform:translateY(-4px); }
+.testi-stars { color:#fbbf24; font-size:0.85rem; margin-bottom:14px; letter-spacing:2px; }
+.testi-text { color:var(--gray); font-size:0.9rem; line-height:1.7; margin-bottom:22px; font-style:italic; }
+.testi-author { display:flex; align-items:center; gap:12px; }
+.author-avatar { width:40px;height:40px;border-radius:50%; display:flex;align-items:center;justify-content:center; font-weight:700; font-size:0.85rem; flex-shrink:0; }
+.author-name { font-weight:600; font-size:0.88rem; }
+.author-role { color:var(--gray); font-size:0.78rem; }
+
+/* ── CONTACT ── */
+#contact { padding:100px 0; }
+.contact-grid { display:grid; grid-template-columns:1fr 1.4fr; gap:80px; align-items:start; }
+.contact-info .section-sub { margin-bottom:40px; }
+.contact-links { display:flex; flex-direction:column; gap:14px; }
+.contact-link {
+  display:flex; align-items:center; gap:12px;
+  color:var(--gray); text-decoration:none;
+  font-size:0.9rem;
+  padding:14px 18px;
+  background:var(--glass);
+  border:1px solid var(--glass-border);
+  border-radius:12px;
+  backdrop-filter:blur(8px);
+  transition:border-color 0.3s, color 0.3s, transform 0.2s;
+}
+.contact-link:hover { border-color:rgba(79,142,247,0.3); color:var(--white); transform:translateX(4px); }
+.contact-form {
+  background:var(--glass);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius);
+  padding:40px;
+  backdrop-filter:blur(12px);
+}
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.form-group { margin-bottom:18px; }
+.form-group label { display:block; font-size:0.8rem; font-weight:500; color:var(--gray); margin-bottom:8px; letter-spacing:0.04em; }
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width:100%;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--glass-border);
+  border-radius:10px;
+  padding:13px 16px;
+  color:var(--white);
+  font-family:'DM Sans',sans-serif;
+  font-size:0.9rem;
+  outline:none;
+  transition:border-color 0.3s, box-shadow 0.3s;
+}
+.form-group input:focus,
+.form-group textarea:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(79,142,247,0.1); }
+.form-group textarea { resize:vertical; min-height:110px; }
+.form-submit {
+  width:100%;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  border:none;
+  border-radius:10px;
+  padding:14px;
+  color:#fff;
+  font-family:'DM Sans',sans-serif;
+  font-size:0.95rem;
+  font-weight:600;
+  cursor:pointer;
+  box-shadow:0 0 30px rgba(79,142,247,0.3);
+  transition:box-shadow 0.3s, transform 0.2s;
+}
+.form-submit:hover { box-shadow:0 0 50px rgba(162,89,255,0.5); transform:translateY(-2px); }
+
+/* ── FOOTER ── */
+footer {
+  border-top:1px solid var(--glass-border);
+  padding:50px 6% 36px;
+}
+.footer-inner { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:28px; }
+.footer-logo {
+  font-family:'Space Grotesk',sans-serif;
+  font-weight:700; font-size:1.1rem;
+  background:linear-gradient(90deg,var(--blue),var(--purple));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.footer-links { display:flex; gap:28px; }
+.footer-links a { color:var(--gray); font-size:0.85rem; text-decoration:none; transition:color 0.2s; }
+.footer-links a:hover { color:var(--white); }
+.footer-social { display:flex; gap:14px; }
+.social-btn {
+  width:36px;height:36px;
+  background:var(--glass);
+  border:1px solid var(--glass-border);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  text-decoration:none;
+  font-size:0.85rem;
+  color:var(--gray);
+  transition:border-color 0.3s,color 0.3s,transform 0.2s;
+}
+.social-btn:hover { border-color:var(--blue); color:var(--blue); transform:translateY(-3px); }
+.footer-copy { width:100%; text-align:center; color:var(--gray); font-size:0.78rem; padding-top:24px; border-top:1px solid var(--glass-border); }
+
+/* ── REVEAL ANIMATION ── */
+.reveal { opacity:0; transform:translateY(40px); transition:opacity 0.8s cubic-bezier(.4,0,.2,1), transform 0.8s cubic-bezier(.4,0,.2,1); }
+.reveal.visible { opacity:1; transform:none; }
+.reveal-delay-1 { transition-delay:0.1s; }
+.reveal-delay-2 { transition-delay:0.2s; }
+.reveal-delay-3 { transition-delay:0.3s; }
+.reveal-delay-4 { transition-delay:0.4s; }
+
+/* ── FLOATING ORBS ── */
+.orb {
+  position:absolute; border-radius:50%;
+  pointer-events:none; filter:blur(80px);
+  animation:orbFloat 8s ease-in-out infinite;
+}
+.orb1 { width:400px;height:400px;background:rgba(79,142,247,0.08);top:10%;left:-10%;animation-delay:0s; }
+.orb2 { width:350px;height:350px;background:rgba(162,89,255,0.07);bottom:10%;right:-5%;animation-delay:-3s; }
+.orb3 { width:250px;height:250px;background:rgba(92,255,177,0.05);top:50%;left:30%;animation-delay:-5s; }
+@keyframes orbFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-30px)} }
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px) {
+  .services-grid { grid-template-columns:1fr 1fr; }
+  .about-grid,.contact-grid { grid-template-columns:1fr; }
+  .about-visual { height:260px; }
+  .process-steps { flex-direction:column; gap:30px; align-items:flex-start; }
+  .process-steps::before { display:none; }
+  .process-step { flex-direction:row; text-align:left; gap:20px; }
+  .step-icon-wrap { flex-shrink:0; }
+  .nav-links,.nav-cta { display:none; }
+  .hamburger { display:flex; }
+  .footer-inner { flex-direction:column; align-items:flex-start; }
+  .form-row { grid-template-columns:1fr; }
+}
+@media(max-width:600px) {
+  .services-grid { grid-template-columns:1fr; }
+  .counters-row { flex-wrap:wrap; }
+  .hero-btns { flex-direction:column; align-items:center; }
+}
+
+/* Mobile nav */
+#mobile-nav {
+  position:fixed; inset:0; background:rgba(2,2,4,0.97); backdrop-filter:blur(24px);
+  z-index:999; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:36px; opacity:0; visibility:hidden; transition:all 0.3s;
+}
+#mobile-nav.open { opacity:1; visibility:visible; }
+#mobile-nav a { color:var(--white); text-decoration:none; font-size:1.4rem; font-weight:500; }
+
+/* whatsapp floating */
+.wa-float {
+  position:fixed; bottom:90px; right:28px; z-index:500;
+  width:52px;height:52px;
+  background:#25D366;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 24px rgba(37,211,102,0.4);
+  text-decoration:none;
+  transition:transform 0.2s,box-shadow 0.2s;
+  font-size:1.4rem;
+}
+.wa-float:hover { transform:scale(1.1); box-shadow:0 8px 32px rgba(37,211,102,0.5); }
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">Vatsal Works</div>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+</div>
+
+<!-- WHATSAPP -->
+<a href="https://wa.me/918299537364" class="wa-float" target="_blank" title="Chat on WhatsApp">💬</a>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Vatsal Works</div>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#showcase">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta nav-links">Book a Call</a>
+  <div class="hamburger" id="hamburger" onclick="toggleMobileNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE NAV -->
+<div id="mobile-nav">
+  <a href="#services" onclick="toggleMobileNav()">Services</a>
+  <a href="#showcase" onclick="toggleMobileNav()">Work</a>
+  <a href="#about" onclick="toggleMobileNav()">About</a>
+  <a href="#process" onclick="toggleMobileNav()">Process</a>
+  <a href="#contact" onclick="toggleMobileNav()">Contact</a>
+  <a href="#contact" onclick="toggleMobileNav()" class="btn-primary" style="font-size:0.95rem">Book a Call</a>
+</div>
+
+<!-- ══════════ HERO ══════════ -->
+<section id="hero">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+  <div class="hero-bg"></div>
+  <div class="grid-bg"></div>
+  <canvas class="particles-canvas" id="particles"></canvas>
+
+  <div style="position:relative;z-index:2">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      AI Automation & SMMA Agency
+    </div>
+    <h1 class="hero-title">
+      We Build AI Systems<br>
+      That <span class="gradient-text">Grow Businesses</span>
+    </h1>
+    <p class="hero-sub">
+      AI Automation, Lead Generation & Social Media Growth for Modern Brands.
+    </p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-primary">Book a Call →</a>
+      <a href="#services" class="btn-secondary">View Services</a>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ══════════ SERVICES ══════════ -->
+<section id="services">
+  <div class="container">
+    <div class="services-header reveal">
+      <div class="section-label">What We Do</div>
+      <h2 class="section-title">Services Built for<br>the AI Era</h2>
+      <p class="section-sub">From intelligent automation to viral content — we build the systems that power modern business growth.</p>
+    </div>
+
+    <div class="services-grid">
+
+      <div class="service-card reveal reveal-delay-1" onclick="toggleService(this)">
+        <div class="service-icon">🤖</div>
+        <div class="service-name">AI Automation</div>
+        <div class="service-desc">Eliminate repetitive tasks with intelligent automation pipelines that work 24/7 without human input.</div>
+        <button class="service-expand-btn">Explore <span class="arrow">→</span></button>
+        <div class="expand-content">
+          <ul>
+            <li>Email & inbox automation workflows</li>
+            <li>CRM data entry & pipeline automation</li>
+            <li>Automated reporting & dashboards</li>
+            <li>Zapier / Make / n8n integrations</li>
+            <li>Custom API workflow orchestration</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="service-card purple-hover reveal reveal-delay-2" onclick="toggleService(this)">
+        <div class="service-icon">🧠</div>
+        <div class="service-name">AI Agents</div>
+        <div class="service-desc">Deploy autonomous AI agents that think, act and execute multi-step tasks on your behalf.</div>
+        <button class="service-expand-btn">Explore <span class="arrow">→</span></button>
+        <div class="expand-content">
+          <ul>
+            <li>Custom GPT & Claude AI agents</li>
+            <li>Customer support AI assistants</li>
+            <li>Sales prospecting agents</li>
+            <li>Research & data extraction bots</li>
+            <li>Multi-agent workflow systems</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="service-card reveal reveal-delay-3" onclick="toggleService(this)">
+        <div class="service-icon">📱</div>
+        <div class="service-name">Social Media Marketing</div>
+        <div class="service-desc">Data-driven SMMA strategies that build audiences and convert followers into paying customers.</div>
+        <button class="service-expand-btn">Explore <span class="arrow">→</span></button>
+        <div class="expand-content">
+          <ul>
+            <li>Instagram & LinkedIn growth strategy</li>
+            <li>Paid ad campaign management</li>
+            <li>AI-assisted content calendar</li>
+            <li>Community management</li>
+            <li>Monthly performance analytics</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="service-card purple-hover reveal reveal-delay-1" onclick="toggleService(this)">
+        <div class="service-icon">🎯</div>
+        <div class="service-name">Lead Generation</div>
+        <div class="service-desc">Automated systems that fill your pipeline with qualified leads every single day.</div>
+        <button class="service-expand-btn">Explore <span class="arrow">→</span></button>
+        <div class="expand-content">
+          <ul>
+            <li>Cold email outreach automation</li>
+            <li>LinkedIn lead scraping & sequences</li>
+            <li>Lead scoring & qualification AI</li>
+            <li>CRM integration & follow-up flows</li>
+            <li>A/B testing frameworks</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="service-card reveal reveal-delay-2" onclick="toggleService(this)">
+        <div class="service-icon">🔧</div>
+        <div class="service-name">Funnel Building</div>
+        <div class="service-desc">High-converting sales funnels engineered to turn cold traffic into loyal customers.</div>
+        <button class="service-expand-btn">Explore <span class="arrow">→</span></button>
+        <div class="expand-content">
+          <ul>
+            <li>VSL & webinar funnel design</li>
+            <li>Landing page copywriting & design</li>
+            <li>Email nurture sequences</li>
+            <li>Upsell & downsell architecture</li>
+            <li>Conversion rate optimization</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="service-card purple-hover reveal reveal-delay-3" onclick="toggleService(this)">
+        <div class="service-icon">✍️</div>
+        <div class="service-name">Content Systems</div>
+        <div class="service-desc">Scalable AI-powered content engines that produce authority-building content at speed.</div>
+        <button class="service-expand-btn">Explore <span class="arrow">→</span></button>
+        <div class="expand-content">
+          <ul>
+            <li>AI content pipeline setup</li>
+            <li>SEO blog & article generation</li>
+            <li>Video script & short-form content</li>
+            <li>Brand voice & tone guidelines</li>
+            <li>Content repurposing workflows</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ SHOWCASE ══════════ -->
+<section id="showcase">
+  <div class="container">
+    <div class="showcase-header reveal">
+      <div class="section-label">What We've Built</div>
+      <h2 class="section-title">AI Systems in Action</h2>
+      <p class="section-sub" style="margin:0 auto">Real automation workflows, dashboards and growth tools deployed for modern brands.</p>
+    </div>
+  </div>
+
+  <div class="showcase-track-wrap">
+    <div class="showcase-track" id="showcaseTrack">
+
+      <div class="showcase-panel">
+        <div class="panel-glow" style="background:var(--blue)"></div>
+        <div class="panel-title">Revenue Dashboard</div>
+        <div class="panel-sub">Real-time business analytics</div>
+        <div class="panel-bars">
+          <div class="panel-bar" style="height:40%;background:rgba(79,142,247,0.4)"></div>
+          <div class="panel-bar" style="height:65%;background:rgba(79,142,247,0.5)"></div>
+          <div class="panel-bar" style="height:50%;background:rgba(79,142,247,0.4)"></div>
+          <div class="panel-bar" style="height:85%;background:var(--blue)"></div>
+          <div class="panel-bar" style="height:70%;background:rgba(79,142,247,0.6)"></div>
+          <div class="panel-bar" style="height:90%;background:var(--blue)"></div>
+          <div class="panel-bar" style="height:75%;background:rgba(79,142,247,0.7)"></div>
+        </div>
+      </div>
+
+      <div class="showcase-panel">
+        <div class="panel-glow" style="background:var(--purple)"></div>
+        <div class="panel-title">Lead Pipeline</div>
+        <div class="panel-sub">Automated CRM system</div>
+        <div class="panel-nodes">
+          <div class="node" style="border-color:var(--blue);color:var(--blue)">Prospect</div>
+          <div class="node" style="border-color:var(--purple);color:var(--purple)">Qualified</div>
+          <div class="node" style="border-color:var(--accent);color:var(--accent)">Closed</div>
+          <div class="node" style="border-color:var(--gray-dim);color:var(--gray)">Nurture</div>
+        </div>
+        <div class="panel-metric" style="margin-top:20px">
+          <div>
+            <div class="metric-num" style="font-size:1.4rem">847</div>
+            <div class="stat-label">leads this month</div>
+          </div>
+          <div class="metric-tag">↑ 38%</div>
+        </div>
+      </div>
+
+      <div class="showcase-panel">
+        <div class="panel-glow" style="background:var(--accent)"></div>
+        <div class="panel-title">AI Chatbot</div>
+        <div class="panel-sub">24/7 customer support</div>
+        <div class="panel-chat">
+          <div class="chat-bubble user">How can I automate my sales?</div>
+          <div class="chat-bubble bot">I can set up an end-to-end AI pipeline for your sales funnel in 7 days...</div>
+        </div>
+      </div>
+
+      <div class="showcase-panel">
+        <div class="panel-glow" style="background:var(--blue)"></div>
+        <div class="panel-title">Growth Analytics</div>
+        <div class="panel-sub">Social media performance</div>
+        <div class="panel-metric" style="margin-top:10px">
+          <div>
+            <div class="metric-num">12.4K</div>
+            <div class="stat-label">new followers</div>
+          </div>
+          <div class="metric-tag">↑ 124%</div>
+        </div>
+        <div class="panel-bars" style="margin-top:14px">
+          <div class="panel-bar" style="height:50%;background:rgba(162,89,255,0.4)"></div>
+          <div class="panel-bar" style="height:70%;background:rgba(162,89,255,0.6)"></div>
+          <div class="panel-bar" style="height:55%;background:rgba(162,89,255,0.4)"></div>
+          <div class="panel-bar" style="height:90%;background:var(--purple)"></div>
+          <div class="panel-bar" style="height:78%;background:rgba(162,89,255,0.7)"></div>
+        </div>
+      </div>
+
+      <div class="showcase-panel">
+        <div class="panel-glow" style="background:var(--purple)"></div>
+        <div class="panel-title">Automation Flow</div>
+        <div class="panel-sub">n8n workflow system</div>
+        <div class="panel-nodes">
+          <div class="node" style="border-color:rgba(79,142,247,0.4);color:var(--gray);font-size:0.7rem">Trigger</div>
+          <span style="color:var(--gray);align-self:center">→</span>
+          <div class="node" style="border-color:rgba(162,89,255,0.4);color:var(--gray);font-size:0.7rem">AI Process</div>
+          <span style="color:var(--gray);align-self:center">→</span>
+          <div class="node" style="border-color:rgba(92,255,177,0.4);color:var(--accent);font-size:0.7rem">Action</div>
+        </div>
+        <div class="panel-metric" style="margin-top:20px">
+          <div>
+            <div class="metric-num" style="font-size:1.4rem">99.8%</div>
+            <div class="stat-label">uptime</div>
+          </div>
+          <div class="metric-tag">Live</div>
+        </div>
+      </div>
+
+      <div class="showcase-panel">
+        <div class="panel-glow" style="background:var(--accent)"></div>
+        <div class="panel-title">Email Campaigns</div>
+        <div class="panel-sub">AI-written sequences</div>
+        <div class="panel-metric">
+          <div>
+            <div class="metric-num">68%</div>
+            <div class="stat-label">open rate</div>
+          </div>
+          <div class="metric-tag">↑ 3x avg</div>
+        </div>
+        <div class="panel-bars" style="margin-top:16px">
+          <div class="panel-bar" style="height:80%;background:rgba(92,255,177,0.5)"></div>
+          <div class="panel-bar" style="height:60%;background:rgba(92,255,177,0.4)"></div>
+          <div class="panel-bar" style="height:95%;background:var(--accent)"></div>
+          <div class="panel-bar" style="height:70%;background:rgba(92,255,177,0.5)"></div>
+          <div class="panel-bar" style="height:85%;background:rgba(92,255,177,0.6)"></div>
+        </div>
+      </div>
+
+      <!-- duplicate for seamless loop -->
+      <div class="showcase-panel">
+        <div class="panel-glow" style="background:var(--blue)"></div>
+        <div class="panel-title">Revenue Dashboard</div>
+        <div class="panel-sub">Real-time business analytics</div>
+        <div class="panel-bars">
+          <div class="panel-bar" style="height:40%;background:rgba(79,142,247,0.4)"></div>
+          <div class="panel-bar" style="height:65%;background:rgba(79,142,247,0.5)"></div>
+          <div class="panel-bar" style="height:85%;background:var(--blue)"></div>
+          <div class="panel-bar" style="height:70%;background:rgba(79,142,247,0.6)"></div>
+          <div class="panel-bar" style="height:90%;background:var(--blue)"></div>
+        </div>
+      </div>
+      <div class="showcase-panel">
+        <div class="panel-glow" style="background:var(--purple)"></div>
+        <div class="panel-title">AI Chatbot</div>
+        <div class="panel-sub">24/7 customer support</div>
+        <div class="panel-chat">
+          <div class="chat-bubble user">Can you generate a report?</div>
+          <div class="chat-bubble bot">Sure! Pulling your latest analytics now... ✅</div>
+        </div>
+      </div>
+      <div class="showcase-panel">
+        <div class="panel-glow" style="background:var(--accent)"></div>
+        <div class="panel-title">Growth Analytics</div>
+        <div class="panel-sub">Social media performance</div>
+        <div class="panel-metric" style="margin-top:10px">
+          <div>
+            <div class="metric-num">3.2M</div>
+            <div class="stat-label">total impressions</div>
+          </div>
+          <div class="metric-tag">↑ 89%</div>
+        </div>
+      </div>
+      <div class="showcase-panel">
+        <div class="panel-glow" style="background:var(--blue)"></div>
+        <div class="panel-title">Lead Pipeline</div>
+        <div class="panel-sub">Automated CRM system</div>
+        <div class="panel-metric" style="margin-top:20px">
+          <div><div class="metric-num" style="font-size:1.4rem">2,140</div><div class="stat-label">deals closed</div></div>
+          <div class="metric-tag">↑ 61%</div>
+        </div>
+      </div>
+      <div class="showcase-panel">
+        <div class="panel-glow" style="background:var(--purple)"></div>
+        <div class="panel-title">Email Campaigns</div>
+        <div class="panel-sub">AI-written sequences</div>
+        <div class="panel-metric">
+          <div><div class="metric-num">42%</div><div class="stat-label">reply rate</div></div>
+          <div class="metric-tag">↑ 5x avg</div>
+        </div>
+        <div class="panel-bars" style="margin-top:16px">
+          <div class="panel-bar" style="height:65%;background:rgba(162,89,255,0.5)"></div>
+          <div class="panel-bar" style="height:90%;background:var(--purple)"></div>
+          <div class="panel-bar" style="height:75%;background:rgba(162,89,255,0.6)"></div>
+        </div>
+      </div>
+      <div class="showcase-panel">
+        <div class="panel-glow" style="background:var(--accent)"></div>
+        <div class="panel-title">Automation Flow</div>
+        <div class="panel-sub">Make.com system</div>
+        <div class="panel-nodes">
+          <div class="node" style="border-color:rgba(92,255,177,0.4);color:var(--accent);font-size:0.7rem">Webhook</div>
+          <span style="color:var(--gray);align-self:center">→</span>
+          <div class="node" style="border-color:rgba(79,142,247,0.4);color:var(--blue);font-size:0.7rem">Filter</div>
+          <span style="color:var(--gray);align-self:center">→</span>
+          <div class="node" style="border-color:rgba(162,89,255,0.4);color:var(--purple);font-size:0.7rem">Send</div>
+        </div>
+        <div class="panel-metric" style="margin-top:20px">
+          <div><div class="metric-num" style="font-size:1.4rem">5,000+</div><div class="stat-label">tasks/month</div></div>
+          <div class="metric-tag">Auto</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ ABOUT ══════════ -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-visual reveal">
+        <div class="about-card main">
+          <div style="flex:1;display:flex;align-items:center;justify-content:center;">
+            <div style="text-align:center">
+              <div style="font-size:3.5rem;margin-bottom:12px">🚀</div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:600;margin-bottom:6px">Built for Scale</div>
+              <div style="color:var(--gray);font-size:0.85rem">AI-first systems that grow with you</div>
+            </div>
+          </div>
+          <div class="counters-row">
+            <div class="counter-item">
+              <div class="counter-num" id="c1">0</div>
+              <div class="counter-lbl">Clients</div>
+            </div>
+            <div class="counter-item">
+              <div class="counter-num" id="c2">0</div>
+              <div class="counter-lbl">Automations Built</div>
+            </div>
+            <div class="counter-item">
+              <div class="counter-num" id="c3">0</div>
+              <div class="counter-lbl">Revenue Generated</div>
+            </div>
+          </div>
+        </div>
+        <div class="about-card float1">
+          <div class="stat-big">98%</div>
+          <div class="stat-label">Client satisfaction rate</div>
+        </div>
+        <div class="about-card float2">
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.88rem;margin-bottom:6px">Avg. ROI</div>
+          <div class="stat-big" style="font-size:2rem">4.8x</div>
+          <div class="stat-label">within 90 days</div>
+        </div>
+      </div>
+
+      <div class="about-text reveal reveal-delay-2">
+        <div class="section-label">About Us</div>
+        <h2 class="section-title">We're the Agency<br>Behind the Growth</h2>
+        <p class="section-sub">Vatsal Works helps modern businesses eliminate manual work, generate quality leads and grow their brand — all powered by AI and strategic marketing systems.</p>
+
+        <div class="timeline" style="margin-top:36px">
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-year">Phase 01</div>
+              <div class="tl-title">Audit & Strategy</div>
+              <div class="tl-desc">We analyze your current operations and identify automation opportunities with the highest ROI potential.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot" style="background:var(--purple);box-shadow:0 0 10px var(--purple)"></div><div class="tl-line" style="background:linear-gradient(to bottom,var(--purple),transparent)"></div></div>
+            <div class="tl-content">
+              <div class="tl-year" style="color:var(--purple)">Phase 02</div>
+              <div class="tl-title">Build & Deploy</div>
+              <div class="tl-desc">Our team builds custom AI systems, funnels and automation workflows tailored to your business model.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left"><div class="tl-dot" style="background:var(--accent);box-shadow:0 0 10px var(--accent)"></div></div>
+            <div class="tl-content">
+              <div class="tl-year" style="color:var(--accent)">Phase 03</div>
+              <div class="tl-title">Scale & Optimize</div>
+              <div class="tl-desc">Ongoing optimization, reporting and scaling to maximize returns and grow your business consistently.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ PROCESS ══════════ -->
+<section id="process">
+  <div class="container">
+    <div class="process-header reveal">
+      <div class="section-label">How It Works</div>
+      <h2 class="section-title">From Zero to Automated<br>in 4 Simple Steps</h2>
+    </div>
+
+    <div class="process-steps reveal reveal-delay-1">
+      <div class="process-step">
+        <div class="step-icon-wrap" style="border-color:rgba(79,142,247,0.4)">
+          🎯
+          <div class="step-glow" style="background:radial-gradient(var(--blue),transparent)"></div>
+          <div class="step-num">01</div>
+        </div>
+        <div>
+          <div class="step-title">Strategy</div>
+          <div class="step-desc">Deep-dive audit of your business. We map bottlenecks and growth opportunities.</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-icon-wrap" style="border-color:rgba(162,89,255,0.4)">
+          ⚙️
+          <div class="step-glow" style="background:radial-gradient(var(--purple),transparent)"></div>
+          <div class="step-num" style="background:var(--purple)">02</div>
+        </div>
+        <div>
+          <div class="step-title">Automation</div>
+          <div class="step-desc">We build and deploy your custom AI systems, agents and automation workflows.</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-icon-wrap" style="border-color:rgba(92,255,177,0.4)">
+          📈
+          <div class="step-glow" style="background:radial-gradient(var(--accent),transparent)"></div>
+          <div class="step-num" style="background:var(--accent);color:#000">03</div>
+        </div>
+        <div>
+          <div class="step-title">Growth</div>
+          <div class="step-desc">Launch marketing campaigns, lead gen and content systems to drive real growth.</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-icon-wrap" style="border-color:rgba(79,142,247,0.4)">
+          🚀
+          <div class="step-glow" style="background:radial-gradient(var(--blue),transparent)"></div>
+          <div class="step-num">04</div>
+        </div>
+        <div>
+          <div class="step-title">Scaling</div>
+          <div class="step-desc">We optimize, analyze and scale your systems to 10x returns month over month.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ TESTIMONIALS ══════════ -->
+<section id="testimonials">
+  <div class="container">
+    <div class="testimonials-header reveal">
+      <div class="section-label">Social Proof</div>
+      <h2 class="section-title">Clients Who Scale With Us</h2>
+    </div>
+  </div>
+
+  <div class="testi-scroll">
+    <div class="testi-track">
+
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-text">"Vatsal Works built a patient follow-up and appointment automation system for our clinic. New patient inquiries have tripled. Incredible system!"</div>
+        <div class="testi-author">
+          <div class="author-avatar" style="background:linear-gradient(135deg,var(--blue),var(--purple))">DK</div>
+          <div><div class="author-name">Deepak Kumar</div><div class="author-role">Dentist, Rudrapur</div></div>
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-text">"With social media and the AI chatbot, patient inquiries at our Ramnagar clinic have doubled. The Vatsal Works team is incredibly professional and fast!"</div>
+        <div class="testi-author">
+          <div class="author-avatar" style="background:linear-gradient(135deg,var(--purple),var(--accent))">RS</div>
+          <div><div class="author-name">Rahul Singh</div><div class="author-role">Dentist, Ramnagar</div></div>
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-text">"Their SMMA team scaled our Instagram from 2K to 45K followers in 4 months. The content system they built is fully automated — we barely touch it."</div>
+        <div class="testi-author">
+          <div class="author-avatar" style="background:linear-gradient(135deg,var(--accent),var(--blue))">AM</div>
+          <div><div class="author-name">Arjun Mehta</div><div class="author-role">Personal Brand Coach</div></div>
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-text">"We implemented their full-stack automation — CRM, email sequences, and AI agents. Our sales cycle dropped from 30 days to 9 days. Just phenomenal work."</div>
+        <div class="testi-author">
+          <div class="author-avatar" style="background:linear-gradient(135deg,#f7924f,var(--purple))">NV</div>
+          <div><div class="author-name">Neha Verma</div><div class="author-role">Director, B2B Agency</div></div>
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-text">"The funnel they built converts at 12% — our industry average is 2%. Vatsal Works doesn't just build pretty pages, they engineer revenue systems."</div>
+        <div class="testi-author">
+          <div class="author-avatar" style="background:linear-gradient(135deg,var(--blue),var(--accent))">SK</div>
+          <div><div class="author-name">Siddharth Kumar</div><div class="author-role">Online Course Creator</div></div>
+        </div>
+      </div>
+
+      <!-- duplicates for loop -->
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-text">"Vatsal Works completely transformed our lead generation. We went from 20 leads/month to 200+ with their AI automation system. Absolutely game-changing."</div>
+        <div class="testi-author">
+          <div class="author-avatar" style="background:linear-gradient(135deg,var(--blue),var(--purple))">DK</div>
+          <div><div class="author-name">Deepak Kumar</div><div class="author-role">Dentist, Rudrapur</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-text">"Their SMMA team scaled our Instagram from 2K to 45K followers in 4 months. The content system they built is fully automated."</div>
+        <div class="testi-author">
+          <div class="author-avatar" style="background:linear-gradient(135deg,var(--accent),var(--blue))">AM</div>
+          <div><div class="author-name">Arjun Mehta</div><div class="author-role">Personal Brand Coach</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-text">"The funnel they built converts at 12% — our industry average is 2%. Vatsal Works doesn't just build pretty pages, they engineer revenue systems."</div>
+        <div class="testi-author">
+          <div class="author-avatar" style="background:linear-gradient(135deg,var(--blue),var(--accent))">SK</div>
+          <div><div class="author-name">Siddharth Kumar</div><div class="author-role">Online Course Creator</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ CONTACT ══════════ -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-info reveal">
+        <div class="section-label">Get in Touch</div>
+        <h2 class="section-title">Ready to Grow<br>With AI?</h2>
+        <p class="section-sub">Let's talk about your business goals and build a custom system that drives real results.</p>
+
+        <div class="contact-links" style="margin-top:36px">
+          <a href="mailto:contact@vatsalworks.com" class="contact-link">
+            <span>📧</span>
+            contact@vatsalworks.com
+          </a>
+          <a href="https://wa.me/918299537364" target="_blank" class="contact-link">
+            <span>💬</span>
+            WhatsApp — Chat Now
+          </a>
+          <a href="https://calendly.com/contact-vatsalworks" target="_blank" class="contact-link">
+            <span>📅</span>
+            Book a Strategy Call
+          </a>
+        </div>
+      </div>
+
+      <div class="contact-form reveal reveal-delay-2">
+        <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.1rem;margin-bottom:28px">Send a Message</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" placeholder="Vatsal">
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" placeholder="Sharma">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="you@company.com">
+        </div>
+        <div class="form-group">
+          <label>Service Interested In</label>
+          <select>
+            <option value="">Select a service...</option>
+            <option>AI Automation</option>
+            <option>AI Agents</option>
+            <option>Social Media Marketing</option>
+            <option>Lead Generation</option>
+            <option>Funnel Building</option>
+            <option>Content Systems</option>
+            <option>Full Package</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tell Us About Your Business</label>
+          <textarea placeholder="Describe your current challenges and what you're looking to achieve..."></textarea>
+        </div>
+        <button class="form-submit" onclick="handleSubmit(this)">Send Message →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <div class="footer-inner" style="max-width:1200px;margin:0 auto">
+    <div class="footer-logo">Vatsal Works</div>
+    <div class="footer-links">
+      <a href="#services">Services</a>
+      <a href="#about">About</a>
+      <a href="#process">Process</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="footer-social">
+      <a href="#" class="social-btn" title="Instagram">IG</a>
+      <a href="#" class="social-btn" title="LinkedIn">in</a>
+      <a href="#" class="social-btn" title="Twitter">𝕏</a>
+      <a href="#" class="social-btn" title="YouTube">▶</a>
+    </div>
+  </div>
+  <div class="footer-copy" style="max-width:1200px;margin:0 auto">
+    © 2025 Vatsal Works. All rights reserved. Built with AI, scaled with strategy.
+  </div>
+</footer>
+
+<script>
+// ── LOADER ──
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hidden');
+  }, 2000);
+});
+
+// ── CURSOR ──
+const dot = document.getElementById('cursor-dot');
+const ring = document.getElementById('cursor-ring');
+let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX; mouseY = e.clientY;
+  dot.style.left = mouseX + 'px';
+  dot.style.top = mouseY + 'px';
+});
+
+function animateRing() {
+  ringX += (mouseX - ringX) * 0.12;
+  ringY += (mouseY - ringY) * 0.12;
+  ring.style.left = ringX + 'px';
+  ring.style.top = ringY + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.querySelectorAll('a, button, .service-card, .showcase-panel, .testi-card').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+});
+
+// ── PARTICLES ──
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.vx = (Math.random() - 0.5) * 0.4;
+    this.vy = (Math.random() - 0.5) * 0.4;
+    this.r = Math.random() * 1.5 + 0.3;
+    this.life = Math.random();
+    this.color = Math.random() > 0.5 ? '79,142,247' : '162,89,255';
+  }
+  update() {
+    this.x += this.vx; this.y += this.vy;
+    this.life -= 0.003;
+    if (this.life <= 0 || this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${this.color},${this.life * 0.7})`;
+    ctx.fill();
+  }
+}
+
+for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+function drawConnections() {
+  particles.forEach((a, i) => {
+    particles.slice(i+1, i+5).forEach(b => {
+      const d = Math.hypot(a.x - b.x, a.y - b.y);
+      if (d < 120) {
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
+        ctx.strokeStyle = `rgba(79,142,247,${(1 - d/120) * 0.08})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    });
+  });
+}
+
+function animateParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => { p.update(); p.draw(); });
+  drawConnections();
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+// ── SCROLL REVEAL ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── COUNTERS ──
+function animateCounter(el, end, suffix = '') {
+  let start = 0;
+  const dur = 2000;
+  const step = (end / dur) * 16;
+  const timer = setInterval(() => {
+    start = Math.min(start + step, end);
+    el.textContent = Math.floor(start) + suffix;
+    if (start >= end) clearInterval(timer);
+  }, 16);
+}
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      animateCounter(document.getElementById('c1'), 50, '+');
+      animateCounter(document.getElementById('c2'), 200, '+');
+      animateCounter(document.getElementById('c3'), 2, 'M+');
+      counterObserver.disconnect();
+    }
+  });
+}, { threshold: 0.3 });
+const aboutSection = document.getElementById('about');
+if (aboutSection) counterObserver.observe(aboutSection);
+
+// ── SERVICE CARD TOGGLE ──
+function toggleService(card) {
+  const wasActive = card.classList.contains('active');
+  document.querySelectorAll('.service-card').forEach(c => c.classList.remove('active'));
+  if (!wasActive) card.classList.add('active');
+}
+
+// ── MOBILE NAV ──
+function toggleMobileNav() {
+  document.getElementById('mobile-nav').classList.toggle('open');
+}
+
+// ── FORM SUBMIT ──
+function handleSubmit(btn) {
+  btn.textContent = 'Sending...';
+  btn.style.opacity = '0.7';
+  setTimeout(() => {
+    btn.textContent = '✓ Message Sent!';
+    btn.style.background = 'linear-gradient(135deg,#10b981,#059669)';
+    btn.style.opacity = '1';
+  }, 1500);
+}
+
+// ── PARALLAX ORBS ──
+document.addEventListener('mousemove', e => {
+  const x = (e.clientX / window.innerWidth - 0.5) * 30;
+  const y = (e.clientY / window.innerHeight - 0.5) * 20;
+  document.querySelectorAll('.orb').forEach((orb, i) => {
+    const factor = (i + 1) * 0.5;
+    orb.style.transform = `translate(${x * factor}px, ${y * factor}px)`;
+  });
+});
+</script>
+<!-- ══════════ REVENUE DASHBOARD MODAL ══════════ -->
+<div id="revenueDashModal" style="display:none;position:fixed;inset:0;z-index:5000;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);overflow-y:auto;padding:40px 20px;">
+  <div style="max-width:860px;margin:0 auto;background:#0e0e12;border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:40px;position:relative">
+    <button onclick="document.getElementById('revenueDashModal').style.display='none'" style="position:absolute;top:18px;right:18px;background:rgba(255,255,255,0.08);border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:1.1rem;cursor:pointer">✕</button>
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;margin-bottom:6px">Revenue Dashboard</div>
+    <div style="color:#8a8a9a;font-size:0.88rem;margin-bottom:32px">How our team generates revenue for your business — step by step</div>
+
+    <!-- Steps -->
+    <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:40px">
+      <div style="background:rgba(79,142,247,0.08);border:1px solid rgba(79,142,247,0.2);border-radius:14px;padding:20px 24px;display:flex;align-items:flex-start;gap:18px">
+        <div style="background:var(--blue);color:#fff;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-family:'Space Grotesk',sans-serif">1</div>
+        <div><div style="font-weight:600;font-family:'Space Grotesk',sans-serif;margin-bottom:5px">Lead Capture — Ads & Outreach</div><div style="color:#8a8a9a;font-size:0.88rem">Our team sources qualified leads through targeted ads, cold email & LinkedIn outreach. Average: 50–200 leads/month per client.</div></div>
+      </div>
+      <div style="background:rgba(162,89,255,0.08);border:1px solid rgba(162,89,255,0.2);border-radius:14px;padding:20px 24px;display:flex;align-items:flex-start;gap:18px">
+        <div style="background:var(--purple);color:#fff;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-family:'Space Grotesk',sans-serif">2</div>
+        <div><div style="font-weight:600;font-family:'Space Grotesk',sans-serif;margin-bottom:5px">AI Qualification — Bot filters hot leads</div><div style="color:#8a8a9a;font-size:0.88rem">Our AI chatbot & automation runs 24/7 — it asks questions, qualifies budget, and automatically books warm leads directly on your calendar.</div></div>
+      </div>
+      <div style="background:rgba(92,255,177,0.06);border:1px solid rgba(92,255,177,0.2);border-radius:14px;padding:20px 24px;display:flex;align-items:flex-start;gap:18px">
+        <div style="background:var(--accent);color:#000;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-family:'Space Grotesk',sans-serif">3</div>
+        <div><div style="font-weight:600;font-family:'Space Grotesk',sans-serif;margin-bottom:5px">Funnel & Follow-up — Automated nurture</div><div style="color:#8a8a9a;font-size:0.88rem">Email sequences, WhatsApp follow-ups and retargeting ads — all fully automated. Leads are nurtured all the way to the sale with zero manual effort.</div></div>
+      </div>
+      <div style="background:rgba(79,142,247,0.08);border:1px solid rgba(79,142,247,0.25);border-radius:14px;padding:20px 24px;display:flex;align-items:flex-start;gap:18px">
+        <div style="background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-family:'Space Grotesk',sans-serif">4</div>
+        <div><div style="font-weight:600;font-family:'Space Grotesk',sans-serif;margin-bottom:5px">Closing & Revenue — You get paying clients</div><div style="color:#8a8a9a;font-size:0.88rem">Deals close inside the CRM. Payment links and invoices are all automated. Your monthly report is visible in real-time on the dashboard.</div></div>
+      </div>
+    </div>
+
+    <!-- Chart -->
+    <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.95rem;margin-bottom:18px">Monthly Revenue Growth (Team-driven)</div>
+    <div style="display:flex;align-items:flex-end;gap:8px;height:120px;margin-bottom:8px" id="revChart"></div>
+    <div style="display:flex;gap:8px;justify-content:space-between" id="revLabels" style="font-size:0.7rem;color:#8a8a9a"></div>
+
+    <!-- Summary row -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px">
+      <div style="background:rgba(79,142,247,0.08);border:1px solid rgba(79,142,247,0.15);border-radius:12px;padding:18px;text-align:center">
+        <div style="font-size:1.6rem;font-weight:700;font-family:'Space Grotesk',sans-serif;color:var(--blue)">₹2.4L+</div>
+        <div style="color:#8a8a9a;font-size:0.8rem;margin-top:4px">Avg. Monthly Revenue</div>
+      </div>
+      <div style="background:rgba(162,89,255,0.08);border:1px solid rgba(162,89,255,0.15);border-radius:12px;padding:18px;text-align:center">
+        <div style="font-size:1.6rem;font-weight:700;font-family:'Space Grotesk',sans-serif;color:var(--purple)">4.8x</div>
+        <div style="color:#8a8a9a;font-size:0.8rem;margin-top:4px">Average ROI in 90 days</div>
+      </div>
+      <div style="background:rgba(92,255,177,0.06);border:1px solid rgba(92,255,177,0.15);border-radius:12px;padding:18px;text-align:center">
+        <div style="font-size:1.6rem;font-weight:700;font-family:'Space Grotesk',sans-serif;color:var(--accent)">7 Days</div>
+        <div style="color:#8a8a9a;font-size:0.8rem;margin-top:4px">Setup to First Lead</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ AI CHATBOT ══════════ -->
+<div id="chatWidget" style="position:fixed;bottom:156px;right:24px;z-index:4000;width:340px;display:none;">
+  <div style="background:#0e0e12;border:1px solid rgba(255,255,255,0.1);border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.5)">
+    <div style="background:linear-gradient(135deg,#4f8ef7,#a259ff);padding:16px 20px;display:flex;align-items:center;justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:36px;height:36px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem">🤖</div>
+        <div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.9rem">Vatsal AI Assistant</div>
+          <div style="font-size:0.72rem;opacity:0.8">● Online 24/7</div>
+        </div>
+      </div>
+      <button onclick="toggleChat()" style="background:rgba(255,255,255,0.15);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:0.9rem">✕</button>
+    </div>
+    <div id="chatMessages" style="height:280px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;">
+      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:10px 14px;font-size:0.82rem;color:#c0c0cc;max-width:85%">
+        Hello! 👋 I'm the AI assistant for Vatsal Works. How can I help grow your business today?
+      </div>
+    </div>
+    <div style="padding:12px 16px;border-top:1px solid rgba(255,255,255,0.06);display:flex;gap:8px">
+      <input id="chatInput" type="text" placeholder="Type your question..." onkeydown="if(event.key==='Enter')sendChat()"
+        style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:99px;padding:9px 16px;color:#fff;font-size:0.82rem;outline:none;font-family:'DM Sans',sans-serif">
+      <button onclick="sendChat()" style="background:linear-gradient(135deg,#4f8ef7,#a259ff);border:none;color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem">→</button>
+    </div>
+  </div>
+</div>
+
+<button id="chatToggleBtn" onclick="toggleChat()" style="position:fixed;bottom:24px;right:24px;z-index:4001;background:linear-gradient(135deg,#4f8ef7,#a259ff);border:none;color:#fff;width:54px;height:54px;border-radius:50%;font-size:1.4rem;cursor:pointer;box-shadow:0 6px 24px rgba(79,142,247,0.4);display:flex;align-items:center;justify-content:center;" title="Chat with AI">🤖</button>
+
+<script>
+// ── REVENUE MODAL ──
+function openRevenueModal() {
+  document.getElementById('revenueDashModal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+  renderRevChart();
+}
+document.getElementById('revenueDashModal').addEventListener('click', function(e){
+  if(e.target === this){ this.style.display='none'; document.body.style.overflow=''; }
+});
+
+function renderRevChart() {
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const vals = [18,28,35,42,55,62,70,80,88,100,115,130];
+  const chart = document.getElementById('revChart');
+  const labels = document.getElementById('revLabels');
+  if(chart.children.length > 0) return;
+  const max = Math.max(...vals);
+  vals.forEach((v,i) => {
+    const bar = document.createElement('div');
+    bar.style.cssText = `flex:1;border-radius:4px 4px 0 0;background:linear-gradient(to top,#4f8ef7,#a259ff);height:0;transition:height 0.6s ${i*0.06}s ease;position:relative`;
+    chart.appendChild(bar);
+    setTimeout(()=>{ bar.style.height = (v/max*100) + '%'; }, 50);
+    const lbl = document.createElement('div');
+    lbl.style.cssText = 'flex:1;text-align:center;font-size:0.62rem;color:#8a8a9a;font-family:DM Sans,sans-serif';
+    lbl.textContent = months[i];
+    labels.appendChild(lbl);
+  });
+}
+
+// Clickable showcase panels
+document.addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('.showcase-panel').forEach(panel => {
+    const title = panel.querySelector('.panel-title')?.textContent || '';
+    panel.style.cursor = 'pointer';
+    panel.addEventListener('click', function(){
+      if(title.includes('Revenue Dashboard')){ openRevenueModal(); }
+      else if(title.includes('AI Chatbot')){ toggleChat(); }
+      else { openPanelModal(title, panel); }
+    });
+  });
+});
+
+function openPanelModal(title, panel) {
+  const existing = document.getElementById('panelModal');
+  if(existing) existing.remove();
+  const modal = document.createElement('div');
+  modal.id = 'panelModal';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:5000;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:20px';
+  modal.innerHTML = `<div style="background:#0e0e12;border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:40px;max-width:500px;width:100%;position:relative">
+    <button onclick="document.getElementById('panelModal').remove();document.body.style.overflow=''" style="position:absolute;top:18px;right:18px;background:rgba(255,255,255,0.08);border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:1.1rem;cursor:pointer">✕</button>
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;margin-bottom:8px">${title}</div>
+    <div style="color:#8a8a9a;font-size:0.88rem;margin-bottom:24px">This system has been deployed by our team for real clients.</div>
+    <div style="background:rgba(79,142,247,0.08);border:1px solid rgba(79,142,247,0.2);border-radius:14px;padding:20px;color:#c0c0cc;font-size:0.88rem;line-height:1.7">
+      ${getPanelDetail(title)}
+    </div>
+    <a href="#contact" onclick="document.getElementById('panelModal').remove();document.body.style.overflow=''" style="display:block;margin-top:24px;text-align:center;background:linear-gradient(135deg,#4f8ef7,#a259ff);color:#fff;padding:12px 28px;border-radius:99px;font-weight:600;text-decoration:none;font-size:0.9rem">Build This For Me →</a>
+  </div>`;
+  modal.addEventListener('click', function(e){ if(e.target===this){ this.remove(); document.body.style.overflow=''; }});
+  document.body.appendChild(modal);
+  document.body.style.overflow = 'hidden';
+}
+
+function getPanelDetail(title) {
+  const details = {
+    'Lead Pipeline': '🎯 Our AI-powered lead pipeline automatically pushes prospects to CRM, qualifies them, and sends follow-up emails/WhatsApp messages — with zero manual input. Clients see an average 38% increase in qualified leads.',
+    'Growth Analytics': '📊 A real-time analytics dashboard for social media platforms that tracks reach, engagement and follower growth. Our SMMA team uses these insights to optimize campaigns.',
+    'Automation Flow': '⚙️ Custom workflows built on n8n / Make.com that trigger, process via AI, and take action automatically — with 99.8% uptime.',
+    'Email Campaigns': '📧 AI-written personalized email sequences that deliver a 68% open rate — 3x the industry average. A/B testing and smart send-time optimization included.',
+  };
+  for(const key in details){ if(title.includes(key)) return details[key]; }
+  return 'Our team will design a custom system for you. Book a call to learn more.';
+}
+
+// ── AI CHATBOT ──
+let chatOpen = false;
+function toggleChat(){
+  chatOpen = !chatOpen;
+  document.getElementById('chatWidget').style.display = chatOpen ? 'block' : 'none';
+  document.getElementById('chatToggleBtn').textContent = chatOpen ? '✕' : '🤖';
+}
+
+async function sendChat(){
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if(!msg) return;
+  input.value = '';
+  addChatBubble(msg, 'user');
+  const typingEl = addChatBubble('Thinking...', 'bot');
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 300,
+        system: 'You are the AI assistant for Vatsal Works, an AI Automation & SMMA agency based in India. Answer only in English. Keep replies short (2-4 lines). Contact: contact@vatsalworks.com, WhatsApp: 8299537364, Calendly: https://calendly.com/contact-vatsalworks. Services: AI Automation, AI Agents, Social Media Marketing, Lead Generation, Funnel Building, Content Systems. Always be helpful and guide towards booking a call.',
+        messages: [{ role: 'user', content: msg }]
+      })
+    });
+    const data = await res.json();
+    typingEl.textContent = data.content?.[0]?.text || 'Something went wrong. Please try again.';
+  } catch(e) {
+    typingEl.textContent = 'Unable to connect right now. WhatsApp us: 8299537364';
+  }
+  const chatMessages = document.getElementById('chatMessages');
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function addChatBubble(text, type){
+  const chatMessages = document.getElementById('chatMessages');
+  const el = document.createElement('div');
+  el.textContent = text;
+  if(type === 'user'){
+    el.style.cssText = 'background:rgba(79,142,247,0.2);border-radius:12px;padding:9px 14px;font-size:0.82rem;color:#e0e0ff;max-width:85%;align-self:flex-end;margin-left:auto';
+  } else {
+    el.style.cssText = 'background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:9px 14px;font-size:0.82rem;color:#c0c0cc;max-width:85%';
+  }
+  chatMessages.appendChild(el);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  return el;
+}
+</script>
+</body>
+</html>
